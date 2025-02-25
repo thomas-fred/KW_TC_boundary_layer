@@ -1,0 +1,4 @@
+*.nc
+*.dat
+bdy_10min.txt
+namelist
