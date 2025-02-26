@@ -1,7 +1,7 @@
 archive/
+MARIA_2017/
 *.nc
 *.dat
 *.d
 bdy_10min.txt
-namelist
 footprint_model

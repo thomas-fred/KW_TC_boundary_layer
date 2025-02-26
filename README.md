@@ -26,7 +26,7 @@ micromamba create -f environment.yml -y
 
 To make these available:
 ```
-micromamba activate kw_pbl
+micromamba activate kw-pbl
 ```
 
 You will also need a fortran compiler, e.g. gfortran or ifort.
@@ -56,14 +56,26 @@ of binary files like `maria_WILLOUBY_000.d`
 
 TODO
 
+# Testing
+
+There is an integration test in `tests/`, run from this directory as follows:
+`./tests/integration.sh`. It requires that the `namelist` has not changed
+without appropriately updating the reference (`maria_WILLOUBY.*`) output in
+`tests/`.
+
 # Plan
 
 For Maria 2017 on Puerto Rico:
 - Run `footprint_model` -- done, takes about 30 CPU hours
-- Run `postprocess_historical.ncl` to create a maximum wind footprint
+- Run `postprocess_historical.ncl` to create a maximum wind footprint -- done,
+with some moving of files
 
 Craft a smaller example (fewer timesteps of Maria?) and create a test script
-using its output
+using its output -- have a version of this: `test.sh`, but it takes a couple of
+minutes to complete 2 hours of Maria at dt=10s. Default timestep is dt=4s. We
+could try coarsening the grid, but that's seemingly encoded in the bdy_10.txt
+file (eye spatial indicies) and many of the input files -- may require running
+`preprocess_historical.ncl` first.
 
 Lint `footprint_model.f` with Fortitude
 

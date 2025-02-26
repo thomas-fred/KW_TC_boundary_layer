@@ -1,6 +1,6 @@
 # to install this environment:
 # micromamba create -f environment.yml -y
-name: kw_pbl
+name: kw-pbl
 channels:
   - conda-forge
   - nodefaults
