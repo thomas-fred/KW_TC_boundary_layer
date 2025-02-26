@@ -7,5 +7,4 @@ channels:
 dependencies:
   - ncl
   - pip:
-    - fortitude
-
+    - fortitude-lint
