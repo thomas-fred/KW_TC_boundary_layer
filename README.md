@@ -9,11 +9,27 @@ The code was modified by James Done and Ming Ge in 2019-2021.
 
 # Aims
 
+Improve the usability of this model
 Run this model for intense synthetic tropical cyclones for Jamaica or Mauritius
 
 # Usage
 
-The code is currently split into three files.
+The code is currently split into three files. The first and last are for pre
+and post processing and are written in NCAR Command Language (NCL), a scripting
+language developed at NCAR and now not maintained. The other contains the
+boundary layer model, written in Fortran of an unknown standard.
+
+To install NCL and other dependencies:
+```
+micromamba create -f environment.yml -y
+```
+
+To make these available:
+```
+micromamba activate kw_pbl
+```
+
+You will also need a fortran compiler, e.g. gfortran or ifort.
 
 ## preprocess_historical.ncl
 

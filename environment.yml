@@ -1,0 +1,11 @@
+# to install this environment:
+# micromamba create -f environment.yml -y
+name: kw_pbl
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - ncl
+  - pip:
+    - fortitude
+
