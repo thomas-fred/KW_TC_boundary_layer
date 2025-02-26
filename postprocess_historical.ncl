@@ -3,9 +3,9 @@
 ; UPDATE: is_vt  = True         ; read vt data from bdy_10min.txt file 
 ; Ming Ge Feb 2020 and modified by James Done Apr 2020
 
-load "/glade/work/done/footprints/raincoat/code/substring.ncl"
-load "/glade/work/done/footprints/raincoat/code/rd_IBTrACS.ncl" 
-load "/glade/work/done/footprints/raincoat/code/vt_latlon_min.ncl"
+load "substring.ncl"
+load "rd_IBTrACS.ncl" 
+load "vt_latlon_min.ncl"
 
 ; JAMES. The fix for the too-high (gradient-like) winds at time zero is to write over the first time:
 ; cp maria_WILLOUBY_001.d maria_WILLOUBY_000.d
@@ -18,12 +18,12 @@ begin
 ;  pro_wind = "H10"
 
 ; select the storm
-; sens_case = "MARIA_2017/"
+  sens_case = "MARIA_2017/"
 ;  sens_case = "IRENE_2011/"
-  sens_case = "IRMA_2017/"
+;  sens_case = "IRMA_2017/"
 
 ; set dir
-  dir_in = "/glade/work/done/footprints/raincoat/output_data/"
+  dir_in = "./"
 
 ; read vt from bdy_10min.txt file if it is available
   is_vt = True          
@@ -34,7 +34,7 @@ begin
   rad  = 4.*atan(1.0)/180.    ; degress to radians
 
   ; read in domain file
-  flnm = "/glade/work/done/footprints/raincoat/input_data/geo_pr.nc"
+  flnm = "geo_pr.nc"
 
   print("input lat-lon file: " + flnm)
   ff     = addfile(flnm, "r")
