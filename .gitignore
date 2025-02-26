@@ -1,4 +1,6 @@
 *.nc
 *.dat
+*.d
 bdy_10min.txt
 namelist
+footprint_model

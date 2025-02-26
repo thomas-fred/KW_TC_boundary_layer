@@ -1,4 +1,4 @@
-A*******************************************************************
+c*******************************************************************
 c  The model is designed to simulate the boundary layer response to *
 c  a presure field of a tropical cyclones in gradient gradient wind *
 c  balance at the top of the boundary layer with a multi-level      *
