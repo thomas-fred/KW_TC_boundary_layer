@@ -80,12 +80,16 @@ could try coarsening the grid, but that's seemingly encoded in the bdy_10.txt
 file (eye spatial indicies) and many of the input files -- may require running
 `preprocess_historical.ncl` first.
 
-Lint / format `footprint_model.f`:
+Lint
+- camfort -- checks for types and dead code
+
+Format
 - ffixed2free -- should move us much closer to a more modern standard like f95
-- fortitude
-- fortify
-- RefactorF4Acc
-- camfort
+- fortify -- apply standard indentation
+
+Refactor
+- f90split -- split program by subroutines (and other blocks?)
+- RefactorF4Acc -- 77 into 95 with refactoring included
 
 Investigate where we can tidy up
 - Tidy up all the paths and organise code and data
