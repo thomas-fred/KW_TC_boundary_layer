@@ -1,6 +1,6 @@
-# Keppert and Wang boundary layer model
+# Kepert and Wang boundary layer model
 
-This repository contains a Fortran implementation of the Keppert and Wang
+This repository contains a Fortran implementation of the Kepert and Wang
 (2001) boundary layer model for coupling gradient-level tropical cyclone winds
 to the earth's surface.
 
