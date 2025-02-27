@@ -13,7 +13,7 @@ c--------------------------------------------------------------------
       implicit none
       integer lq, lp, km, nbd, nx, ny, nx_c, ny_c, n_bdy, n_lu
       parameter(km=18, nbd=10, n_lu=21)
-c 
+c
       integer nt,jt0,it0,ji,ij,jtop,itop,jj,ii
       integer i,j,k,kk,inhr,indx,kfi,hr_o
       integer nhr,npl,khr,nst,ntt,nmh
@@ -24,9 +24,9 @@ c
       real dir_gl, dir_gl_0, dir_sfc, dir_sfc_0, spd_gl, spd_gl_0
       real bnd(nbd)
 
-      real, allocatable, dimension(:):: vm_1d, pc_1d, rm_1d, r34_1d, 
+      real, allocatable, dimension(:):: vm_1d, pc_1d, rm_1d, r34_1d,
      +                           pe_1d, typ_1d, txp_1d, lat_1d, lon_1d
-  
+
       real, allocatable, dimension(:,:)::f_2d, prx, pry, prr, bw, slp,
      +                                top, cd, rr_tc, topo, lat_2d, top4
       real, allocatable, dimension(:,:,:):: u, v, w, u4, v4, akv
@@ -37,7 +37,7 @@ c  Model variables as usually used
       real zz(km+1),zu(km),dzz(km),dzu(km), sfz0(n_lu)
       real vmt,rmt,r34t,pct,pet
       real tvmt,trmt,tr34t,tpct,tpet
- 
+
       character fnm*20,fname*10, nhr_s*3, nt_s*3, pro_wind*10
 
       NAMELIST /INIT/lp,lq,ds,dt,kfi,khr,indx,nst,fnm,pro_wind
@@ -58,7 +58,7 @@ c   pro_wind - wind profile, H10 and WILLOUBY for now
       close(7)
 
       nx=lq
-      ny=lp 
+      ny=lp
 
       nx_c  = (nx+1)/2
       ny_c  = (ny+1)/2
@@ -84,8 +84,8 @@ c     read time series of TC info. from ebtrk every 10 minutes
      +             , rm_1d(k), r34_1d(k), pe_1d(k), lat_1d(k), lon_1d(k)
       enddo
       close(17)
-  27  format(2f10.2, 5f10.1, 2f10.2 ) 
-c JAMES check read in is ok   
+  27  format(2f10.2, 5f10.1, 2f10.2 )
+c JAMES check read in is ok
       Print*, txp_1d
       Print*, typ_1d
       Print*, vm_1d
@@ -95,22 +95,22 @@ c JAMES check read in is ok
       Print*, pe_1d
       Print*, lat_1d
       Print*, lon_1d
-c JAMES check read in is ok   
+c JAMES check read in is ok
 
 
 
 c JAMES test for N. Hemisphere storms
 c      lat_1d=lat_1d*-1.
 c      Print*, lat_1d
-c JAMES test for N. Hemisphere storms    
+c JAMES test for N. Hemisphere storms
 
 
 c-----------------------------------
-c to read lat-lon, landuse and terrain data 
+c to read lat-lon, landuse and terrain data
 c-----------------------------------
       open (16, file="lat_2d.dat", form="unformatted")
       read (16) lat_2d
-       
+
 c JAMES test for N. Hemisphere storms
 c      lat_2d = lat_2d*-1.
 c JAMES test for N. Hemisphere storms
@@ -138,27 +138,27 @@ c JAMES test for N. Hemisphere storms
         land(j,i)=0
         if(top(j,i).le.0.12) top(j,i)=0.0
         if(top(j,i).gt.0.12) land(j,i)=1
-        cd(j,i)=0.4*0.4*log(10.0/(sfz0(landuse(j,i))*0.01))**(-2) 
+        cd(j,i)=0.4*0.4*log(10.0/(sfz0(landuse(j,i))*0.01))**(-2)
       enddo
       enddo
 
 c if rmax is missing,calculates Rmax using Eq. 7a from Willoughby et al. (2006):
-c fix spd_gl 
+c fix spd_gl
       do k = 1, n_bdy
         if(rm_1d(k).ge.800.0e3.or.rm_1d(k).le.9.0e3) then
           !spd_gl_0 =spd_gl(vm_1d(k),land(int(txp_1d(k)),int(txp_1d(k))))
           spd_gl_0 =vm_1d(k)/0.9
-          rm_1d(k) = max(rm_1d(k), 
+          rm_1d(k) = max(rm_1d(k),
      +         46.4 *exp(-0.0155*spd_gl_0+ 0.0169*abs(lat_1d(k)))*1.0e3)
         end if
       end do
-      
+
       zz(1)=0.0
       do k=2,km+1
 !       zz(k)=zz(k-1)+20.0*(real(k-1))**0.5
 !  Yuqing version
 !       zz(k)=zz(k-1)+20.0*(real(k-1))**0.67026
-! Ming version   if topo is too hight, change following parameter     
+! Ming version   if topo is too hight, change following parameter
 ! 0.9->2550  0.95 -> 2875  0.98->3088
       zz(k)=zz(k-1)+20.0*(real(k-1))**0.98
       enddo
@@ -173,7 +173,7 @@ c fix spd_gl
       dzu(km)=2.0*zz(km+1)-zu(km)
 
 c     inhr: time steps in an hour
-c     hr_o: time steps for 10-minute output hr_o 
+c     hr_o: time steps for 10-minute output hr_o
       inhr = int(3600.0/dt + 0.1)
       hr_o = int(60*10/dt + 0.1)
 
@@ -184,7 +184,7 @@ c f = 2*omega*sin(phi)
       pi1=atan(1.d0)/45.0d0
       do i=1,lp
       do j=1,lq
-        f_2d(j,i) = 1.4584d-4*sin(lat_2d(j,i)*pi1)  
+        f_2d(j,i) = 1.4584d-4*sin(lat_2d(j,i)*pi1)
       end do
       end do
 
@@ -236,7 +236,7 @@ c-----------------------------------------------
       r34t=r34_1d(1)
       pct =pc_1d(1)
       pet =pe_1d(1)
-     
+
 c------------------------------------------------------------
 c to initialize the model wind & pressure gradient fields
 c-------------------------------------------------------------
@@ -263,7 +263,7 @@ c
       ntt = 1
       nt  = nhr*inhr
 c
-  100 nt = nt+1 
+  100 nt = nt+1
 c
       if(mod(nt-1,inhr).eq.0) then
         nhr=(nt-1)/inhr
@@ -272,9 +272,9 @@ c  to determine the cyclone parameters such as center, maximum wind.
 c-------------------------------------------------------------------
         txpc=txp_1d(nmh)
         typc=typ_1d(nmh)
-        
+
         call centre(u,v,lq,lp,km,vm1,um1,rm1,txpc,typc,ds)
-      
+
         write(6, 121) nhr,txpc,typc,vm1,rm1
         write(10,121) nhr,txpc,typc,vm1,rm1
  121    format(1x,'hr=',i3,', txp=',f8.3,', typ=',f8.3,', vm=',f5.1,
@@ -295,7 +295,7 @@ c-------------------------------------------------------------------
           tr34t= (r34_1d(nmh+1)-r34_1d(nmh-1))/1200.0
           tpct = (pc_1d(nmh+1)-pc_1d(nmh-1))/1200.0
           tpet = (pe_1d(nmh+1)-pe_1d(nmh-1))/1200.0
-c         
+c
           txp  = txp_1d(nmh) + ux*dt/ds
           typ  = typ_1d(nmh) + vy*dt/ds
           vmt  = vm_1d (nmh) + tvmt*dt
@@ -313,7 +313,7 @@ c
           pet  = pet + tpet*dt
         end if
 
-c      write out after 10 minute      
+c      write out after 10 minute
        if(mod(nt-1, hr_o).eq.0) then
 
 c        call cal_slp(slp, lq, lp, ds, prx, pry, txp, typ, pct)
@@ -327,7 +327,7 @@ c        call cal_slp(slp, lq, lp, ds, prx, pry, txp, typ, pct)
         do j=1,nx
           jj = j
             ii = i
- 
+
           top4(j,i)=top(jj,ii)
           do k=1,km
             u4(j,i,k)=u(jj,ii,k)
@@ -336,7 +336,7 @@ c        call cal_slp(slp, lq, lp, ds, prx, pry, txp, typ, pct)
 
         end do
         end do
-c     
+c
         write (nt_s, '(I3.3)') (nt-1)/hr_o
         open(21, file=trim(fnm)//'_'//trim(pro_wind)//"_"//trim(nt_s)
      +     //'.d', form='unformatted')
@@ -349,7 +349,7 @@ c
         enddo
 
         write(21) ((top4(j,i),j=1,nx),i=1,ny)
- 
+
         write(21) ((cd(j,i),j=1,nx),i=1,ny)
 
         write(21) ((slp(j,i),j=1,nx),i=1,ny)
@@ -382,7 +382,7 @@ c       if(mod(nt, hr_o).eq.hr_o/2) then
      +                     ,ux,vy,lat_1d(nmh),land)
         end if
 
-       
+
         call inner(u,v,w,f_2d,prx,pry,akv,lq,lp,ds,dt,top,
      +     land,cd,bw,bnd,km,zz,dzz,zu,dzu,nbd,ntt,nst)
 
@@ -396,8 +396,8 @@ c       if(mod(nt, hr_o).eq.hr_o/2) then
       deallocate(vm_1d,pc_1d, rm_1d, r34_1d,pe_1d,lat_1d,lon_1d)
 
       close(10)
-      stop 
-      end 
+      stop
+      end
 c Ming Ge Feb. 2 2021 calculate surface pressure from prx, pry,,txp,typ,pct
 c Modified by James Done Mar 5 2021
 
@@ -411,15 +411,15 @@ c Modified by James Done Mar 5 2021
        jc = int(tyc)
 
        slp(ic, jc) = pc
-c      Standard Atmosphere states the density of air is 1.225kg/m3 
+c      Standard Atmosphere states the density of air is 1.225kg/m3
 c      for hurrican, (P=980hPa, T= 300, R= 287) rho = 1.13
-c       rho = 1.13 
+c       rho = 1.13
 c       Print*, "ds = ", ds
 c       Print*, "ds_rho = ", ds_rho
 
 c      we divide by 100 to convert from pascals to hPa
 c      we actually divide by 113 because we divide by 100 and by rho
-      
+
        do ii = 1, ic - 1
          slp(ic-ii, jc) =  slp(ic-ii+1, jc) - prx(ic-ii, jc)*ds/100.
        enddo
@@ -453,7 +453,7 @@ c
         integer i,j,k,IL,JL,km,nbn,ntt,nst
         real uu,vv,ds,dt,vadu,vadv,coru,corv
         real ww,wwa,wwb
-        real u(IL,JL,km),v(IL,JL,km),prx(IL,JL),pry(IL,JL),f_2d(IL,JL) 
+        real u(IL,JL,km),v(IL,JL,km),prx(IL,JL),pry(IL,JL),f_2d(IL,JL)
         real up(IL,JL,km),vp(IL,JL,km),akh(IL,JL,km),akv(IL,JL,km)
         real ut(IL,JL,km),vt(IL,JL,km),bw(IL,JL),bnd(nbn)
         real w(IL,JL,km+1),zz(km+1),dzz(km),zu(km),dzu(km)
@@ -580,11 +580,11 @@ c
        call bound(u,IL,JL,bnd,nbn,km,nst)
        call bound(v,IL,JL,bnd,nbn,km,nst)
        call www(w,u,v,top,IL,JL,km,ds,zz,zu,dzz,nst)
-       return                                                      
-       end    
+       return
+       end
 c
 c----------------------------------------------------------
-c  To calculate horizontal advection tendency of u, v winds 
+c  To calculate horizontal advection tendency of u, v winds
 c----------------------------------------------------------
 
        subroutine hadva(had,u,v,a,IL,JL,km,ds,nnest)
@@ -639,7 +639,7 @@ c$omp& private(i,j,k,advx,im1,im2,im3,ip1,ip2,ip3)
            if(u(i,j,k).ge.0.0) then
             advx(i)=(-dsi*C2*u(i,j,k))*(-3.0*a(ip2,j,k)+30.0*
      +          a(ip1,j,k)+20.0*a(i,j,k)-60.0*a(im1,j,k)+15.0
-     +          *a(im2,j,k)-2.0*a(im3,j,k))  
+     +          *a(im2,j,k)-2.0*a(im3,j,k))
            else
             advx(i)=(-dsi*C2*u(i,j,k))*(2.0*a(ip3,j,k)-15.0
      +          *a(ip2,j,k)+60.0*a(ip1,j,k)-20.0*a(i,j,k)-30.0*
@@ -698,7 +698,7 @@ c$omp& private(i,j,k,advx)
            if(u(i,j,k).ge.0.0) then
             advx(i)=(-dsi*C2*u(i,j,k))*(-3.0*a(i+2,j,k)+30.0*
      +          a(i+1,j,k)+20.0*a(i,j,k)-60.0*a(i-1,j,k)+15.0
-     +          *a(i-2,j,k)-2.0*a(i-3,j,k))  
+     +          *a(i-2,j,k)-2.0*a(i-3,j,k))
            else
             advx(i)=(-dsi*C2*u(i,j,k))*(2.0*a(i+3,j,k)-15.0
      +          *a(i+2,j,k)+60.0*a(i+1,j,k)-20.0*a(i,j,k)-30.0*
@@ -712,7 +712,7 @@ c
          enddo
          enddo
 c$omp end parallel do
- 
+
       endif
 
 c$omp parallel do default(shared)
@@ -792,7 +792,7 @@ c
       dsi2=1.0d0/(2.0d0*ds*ds)
       akmax2=ds*ds/(8.d0*dt)
 c-------------------------------------------------------------
-c  To include linear 4th-order horizontal diffusion term using 
+c  To include linear 4th-order horizontal diffusion term using
 c  the t-1 time level fields to ensure the numerical stability
 c-------------------------------------------------------------
 c
@@ -844,7 +844,7 @@ c$omp& private(j,i,k,jm1,jp1)
  20   continue
 c$omp end parallel do
 
-      else 
+      else
 c
 c$omp parallel do default(shared)
 c$omp& private(j,i,k,dm1,dm2,dm)
@@ -1057,7 +1057,7 @@ c radial
       vv(i,j)=b
 110   continue
 c..............................................................
-c calculate the max 
+c calculate the max
 c..............................................................
         vm=0.0
          do i=1,lm
@@ -1095,7 +1095,7 @@ c***********************************************************
 100     continue
         rm1=rm1*ds/1000.0
 
-        return 
+        return
         end
 
       SUBROUTINE SCINEX(GM,GN,SCALA,SCINTO,IL,JL)
@@ -1225,7 +1225,7 @@ c$omp& private(j,i,k,jm1,jp1,w1,w2,w3,term,fc,fc2)
       endif
       w(j,i,1)=0.0
 c Ming 0.90 - > 0.90 doesn't help
-c     fc=1.0-top(j,i)/hh  
+c     fc=1.0-top(j,i)/hh
       fc=1.0-min(top(j,i)/hh, 0.90)
       fc2=fc*fc
       do 112 k=1,km
@@ -1254,7 +1254,7 @@ c     w3=-term*(1.0-zu(k)/hh)/(1.0-top(j,i)/hh)
 c$omp end parallel do
 c
       return
-      end 
+      end
 c
 c++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 c
@@ -1410,11 +1410,11 @@ c
 c      pe = environment pressure value is set to climatology
 c      ee = base of natural logarithms
 c      sfc density = 1.13 (at 980mb)
-c      eqn 7 in Holland 2010. 
+c      eqn 7 in Holland 2010.
 c      Assume Vmax and Pmin are reliablly observed
 c      It is not critical and a constant value of density can e used.
-c       pe = 1010.   
-c      fac is a reduction factor from gradient winf to 10-m wind 
+c       pe = 1010.
+c      fac is a reduction factor from gradient winf to 10-m wind
 c      Ming Ge: March 2018. adjust Vmax by removing forward motion of storm
 c      Vmax_sfc_sym = vmax - 0.5*TC_speed
 c       vm_sfc_sym = vm - 0.5*sqrt(ux*ux+vy*vy)
@@ -1507,16 +1507,16 @@ c
        real ee, pe, pc, bs, b, term1
        real slp(IL,JL)
 
-c      Using eqn 2 in Holland 2010:                                                                                                                                                  
+c      Using eqn 2 in Holland 2010:
 c      slp = pc + (pe - pc)*exp(-1.*(rm/r)**b)
-c      ee = base of natural logarithms                                                                                                                                          
-c      sfc density = 1.13 (at 980mb)  
+c      ee = base of natural logarithms
+c      sfc density = 1.13 (at 980mb)
        ee = 2.718281
        vm_sfc_sym = vm
 
        bs = (vm_sfc_sym*vm_sfc_sym*1.13*ee)/(100.*(pe-pc))
 
-c      fac is a reduction factor from gradient wind to 10-m wind                                                                                                                      
+c      fac is a reduction factor from gradient wind to 10-m wind
        fac = 0.71
 
 c      calculate b from bs from Holland et al. (2010)
@@ -1528,8 +1528,8 @@ c       jc = int(tyc)
 c       slp(ic, jc) = pc
 
 
-c$omp parallel do default(shared)                                                                                                                                                     
-c$omp& private(j,i,tx,ty,rr,term1,slp_tmp)                                                                                                                             
+c$omp parallel do default(shared)
+c$omp& private(j,i,tx,ty,rr,term1,slp_tmp)
       do j=1,JL
          ty = (real(j)-tyc)*ds
          do i=1,IL
@@ -1543,7 +1543,7 @@ c           rr = max(1.0,sqrt(ty*ty+tx*tx))
 
          enddo
        enddo
-c$omp end parallel do                                                                                                                                                              
+c$omp end parallel do
        return
        end
 
@@ -1560,9 +1560,9 @@ c
 c      pe = environment pressure value is set to climatology
 c      ee = base of natural logarithms
 c      sfc density = 1.13 (at 980mb)
-c      eqn 7 in Holland 2010. 
+c      eqn 7 in Holland 2010.
 c       pe = 1010.
-c      fac is a reduction factor from gradient winf to 10-m wind 
+c      fac is a reduction factor from gradient winf to 10-m wind
 c      vm_sfc_sym = vm - 0.5*sqrt(ux*ux+vy*vy)
        vm_sfc_sym = vm
        ee = 2.718281
@@ -1634,7 +1634,7 @@ c
        tx=(real(i)-txc)*ds
        rr=sqrt(ty*ty+tx*tx)
        rd=rr/rm
-       vt=vm/rm*exp((1.d0-rd**b)/b) 
+       vt=vm/rm*exp((1.d0-rd**b)/b)
        if(rd.lt.1.0) vt=vt*0.2*(1.0+4.0*sqrt(rd))
        if(rr.ge.r0) vt=vt*exp(-2.0*(rr-r0)/r0)
        vt=vt/fac
@@ -1650,14 +1650,14 @@ c
        return
        end
 
-c  to get estimated symmetric surface-level tangential winds from gradient-levels winds, 
+c  to get estimated symmetric surface-level tangential winds from gradient-levels winds,
 c  uses a method from Knaff et al. (2011).
 c  This method uses a reduction factor of 0.90 up to a radius(rr0) of 100 km
-c  a reduction factor of 0.75 for any radius 700 km or greater 
-c  and a linear decreasing reduction factor for any radius between those two radius values 
+c  a reduction factor of 0.75 for any radius 700 km or greater
+c  and a linear decreasing reduction factor for any radius between those two radius values
 c  If the point is over land (true for any county), this reduction factor is further reduced by 20%
        real function wind_sfc_sym(spd_gl, rr_dist, is_land)
-         
+
        implicit none
        integer is_land
        real reduction_fac, reduction_fac0, reduction_fac1
@@ -1696,15 +1696,15 @@ c calculate gradient wind from symmetric surface wind
          reduction_factor = reduction_factor*.8
       end if
       spd_gl = vmax/reduction_factor
-  
+
       end
 c Calculate the direction of gradient winds at each location
       real function dir_gl(u,v)
-      
+
       implicit none
-      real, parameter :: pi = 3.14159265 
+      real, parameter :: pi = 3.14159265
       real u,v
-    
+
       if (abs(v) > .0001) then
          dir_gl =atan(u/v)
       else
@@ -1716,34 +1716,34 @@ c Calculate the direction of gradient winds at each location
       endif
       dir_gl = dir_gl*360./(2.0*pi)
       if (v   > 0.) dir_gl = dir_gl + 180.
-      if (dir_gl < 0.) dir_gl = dir_gl + 360. 
+      if (dir_gl < 0.) dir_gl = dir_gl + 360.
       end function dir_gl
 
 c Calculate the surface wind direction from gradient winds
 c the function adds an inflow angle to the gradient wind direction.
-c because surface friction changes the wind direction 
-c The inflow angle is calculated as a function of the distance from the storm center 
+c because surface friction changes the wind direction
+c The inflow angle is calculated as a function of the distance from the storm center
 c to the location and the storm's Rmax at that observation point (eq. 11a--c, Phadke et al. 2003):
 
       real function dir_sfc(dir_gl, rr_dist, is_land, rmax)
       implicit none
-      real dir_gl, rr_dist, is_land, rmax,  inflow_angle 
+      real dir_gl, rr_dist, is_land, rmax,  inflow_angle
 
 c     Calculate inflow angle over water based on radius of location from storm
 c     center in comparison to radius of maximum winds (Phadke et al. 2003)
-      if(rr_dist.lt.rmax) then      
+      if(rr_dist.lt.rmax) then
          inflow_angle = 10 + (1 + (rr_dist/rmax))
       else if(rr_dist.ge.rmax.and.rr_dist.le.1.2*rmax) then
          inflow_angle = 20 + 25 * ((rr_dist/rmax) - 1)
       else
-        inflow_angle = 25 
+        inflow_angle = 25
       end if
 
 c Add 20 degrees to inflow angle since location is over land, not water
       if(is_land.eq.1) then
         inflow_angle = inflow_angle + 20
-      end if      
-      
+      end if
+
       dir_sfc = dir_gl + inflow_angle
       if (dir_sfc > 360.) dir_sfc = dir_sfc - 360.
       end function dir_sfc
@@ -1755,25 +1755,25 @@ c add back in wind from forward speed of TC
       real*4 u_sfc,v_sfc
       real deg_2_rad, spd_sfc_sym, dir_sfc
       real correction_factor, rmax, rr_dist, tcspd_u, tcspd_v
- 
-c     3.14/180      
-      deg_2_rad = 0.01745239 
+
+c     3.14/180
+      deg_2_rad = 0.01745239
       u_sfc = -spd_sfc_sym*sin(dir_sfc*deg_2_rad)
       v_sfc = -spd_sfc_sym*cos(dir_sfc*deg_2_rad)
- 
+
 c     Add back in component from forward motion of the storm
       correction_factor = (rmax * rr_dist)/(rmax*rmax + rr_dist*rr_dist)
-      
+
 c     Add tangential and forward speed components and calculate
 c     magnitude of this total wind
-      u_sfc = u_sfc + correction_factor * tcspd_u      
-      v_sfc = v_sfc + correction_factor * tcspd_v  
-      
-      end subroutine wind_sfc 
+      u_sfc = u_sfc + correction_factor * tcspd_u
+      v_sfc = v_sfc + correction_factor * tcspd_v
 
-c calculate all the inputs needed for the Willoughby wind profile   
+      end subroutine wind_sfc
+
+c calculate all the inputs needed for the Willoughby wind profile
 c equation 10 a-c
-c lat_tc: Latitude, in decimal degrees 
+c lat_tc: Latitude, in decimal degrees
       subroutine get_wind_param_eq10(X1, NN, AA, vm_gl, lat_tc)
 
 c JAMES v2
@@ -1791,7 +1791,7 @@ c       X1 = 380
        ! Adding 10% according to climate change
 c       X1 = 418.
 c JAMES test
-       ! km ->m  
+       ! km ->m
        X1 = X1*1.0e3
        ! Power-law exponent for porfile inside the eye (equation 10b)
        NN = 0.4067 + 0.0144 * vm_gl - 0.0038 * abs(lat_tc)
@@ -1808,10 +1808,10 @@ c JAMES v2
        return
        end
 
-c calculate all the inputs needed for the Willoughby wind profile   
+c calculate all the inputs needed for the Willoughby wind profile
 c equation 11 a-c
-c lat_tc: Latitude, in decimal degrees 
-c rm: radius of maximum wind. 
+c lat_tc: Latitude, in decimal degrees
+c rm: radius of maximum wind.
       subroutine get_wind_param_eq11(X1, NN, AA, vm_gl, lat_tc, rm)
 
 c JAMES v2
@@ -1822,7 +1822,7 @@ c Convert latitude to absolute values of latitude so the parameters are the same
 
        ! exponential decay length(km) in outer vortex (equation 10a)
        X1 = 287.6 - 1.942 * vm_gl + 7.799*log(rm)+ 1.819 * abs(lat_tc)
-       ! km ->m  
+       ! km ->m
        X1 = X1*1.0e3
        ! Power-law exponent for porfile inside the eye (equation 10b)
        NN = 2.1340 + 0.0077* vm_gl - 0.4522*log(rm) -0.0038*abs(lat_tc)
@@ -1839,7 +1839,7 @@ c JAMES v2
        end
 
 c calculate lower(R1) and upper(R2) boundary of the transition zone (km)
-c assumes that  R2 − R1 (the width of the transition region) is 25 kilometers 
+c assumes that  R2 − R1 (the width of the transition region) is 25 kilometers
 c when Rmax is larger than 20 kilometers and 15 kilometers otherwise.
       subroutine get_R1R2(R1, R2, rm, X1, NN, AA)
 
@@ -1867,13 +1867,13 @@ c when Rmax is larger than 20 kilometers and 15 kilometers otherwise.
 
       !Compute outer boundary
       R2 = R1 + WID
-      
+
       return
       end subroutine get_R1R2
 
 c Polynomial ramp function
 c when x, the nondimensional argument, is  <= zero, wgt=0
-c when x >= 1 wgt =1, 
+c when x >= 1 wgt =1,
 c First and second derivitives are zero at both ends, C2 continuity.
       real function wgt(x)
 
@@ -1966,7 +1966,7 @@ c --------------------------------------------
       ! adjust Vmax by removing forward motion of storm
       ! (Phadke et al. 2003)
       ! Vmax_sfc_sym = vmax - 0.5*TC_speed
-      !vm_sfc_sym = vm - 0.5*sqrt(ux*ux+vy*vy) 
+      !vm_sfc_sym = vm - 0.5*sqrt(ux*ux+vy*vy)
       vm_sfc_sym = vm
 
 c JAMES v2
@@ -1979,9 +1979,9 @@ c JAMES v2
 
 
       ! origional reduction_land   = 0.8
-      ! Dec. 3 2018. 
+      ! Dec. 3 2018.
       !The reduction_land factor in Willoughby is causing us some problems with a strange speed up of winds near the coast.
-      reduction_land   = 1.0 
+      reduction_land   = 1.0
 
       vm_gl = vm_sfc_sym/reduction_factor
 
@@ -1995,11 +1995,11 @@ c JAMES v2
 
       call get_wind_param_eq10(X1, NN, AA, vm_gl, lat)
       !call get_wind_param_eq11(X1, NN, AA, vm_gl, lat, rm*0.001)
- 
+
       call get_R1R2(R1, R2, rm, X1, NN, AA)
 
       spd_tc = sqrt(ux*ux+vy*vy)
-c      
+c
 c$omp parallel do default(shared)
 c$omp& private(j,i,k,tx,ty,rr,vt, fac, correction_factor)
       ! two-exponential profile
@@ -2008,7 +2008,7 @@ c$omp& private(j,i,k,tx,ty,rr,vt, fac, correction_factor)
         do i=1,IL
           tx = (real(i)-txc)*ds
           rr = max(1.0,sqrt(ty*ty+tx*tx))
-          !Compute winds 
+          !Compute winds
           if(land(i,j).eq.1) then
             fac = reduction_factor*reduction_land
           else
@@ -2016,7 +2016,7 @@ c$omp& private(j,i,k,tx,ty,rr,vt, fac, correction_factor)
           end if
 
 c JAMES v2
-c Remove the double counting of the reduction factor 'fac'. 
+c Remove the double counting of the reduction factor 'fac'.
 c The reduction factor was applied earlier in this subroutine.
 c          vt = VofR2(rr,vm_gl, rm, R1,R2, WID, NN, X1, X2, AA)/fac
           vt = VofR2(rr,vm_gl, rm, R1,R2, WID, NN, X1, X2, AA)
@@ -2024,7 +2024,7 @@ c JAMES v2
 
 
 c JAMES v2
-c Decided to add the asymmetry i the post-processing 
+c Decided to add the asymmetry i the post-processing
           correction_factor = 0.0
 c          correction_factor = 2.0*(rm*rr)/(rm**2 + rr**2)
 c     +                        *1.173*spd_tc**0.63/spd_tc
@@ -2088,11 +2088,11 @@ c      reduction_factor = 0.85
 c Changed the reduction factor to 0.71
 c      reduction_factor = 0.76
       reduction_factor = 0.71
-c Justified in KW01 showed it ranges from .9 to .7 around the storm, 
-c and that is the factor from gradient to 22 m. 
-c We are going to 10 m so it'll be even more justified at the .7 level.  
-c Vickerey shows a factor of about 0.72 going from the supergradient jet to sfc. 
-c We don't allow enough time for jet to form so we artifically put it in.   
+c Justified in KW01 showed it ranges from .9 to .7 around the storm,
+c and that is the factor from gradient to 22 m.
+c We are going to 10 m so it'll be even more justified at the .7 level.
+c Vickerey shows a factor of about 0.72 going from the supergradient jet to sfc.
+c We don't allow enough time for jet to form so we artifically put it in.
 c In anycase, 0.76 is well within 1sd of the mean (0.81) of 150 dropsode obs of Powell.
 c JAMES v2
 
@@ -2115,7 +2115,7 @@ c JAMES v2
       call get_R1R2(R1, R2, rm, X1, NN, AA)
 
       spd_tc = sqrt(ux*ux+vy*vy)
- 
+
 c$omp parallel do default(shared)
 c$omp& private(j,i,k,tx,ty,rr,vt,fac,correction_factor)
       ! two-exponential profile
@@ -2124,7 +2124,7 @@ c$omp& private(j,i,k,tx,ty,rr,vt,fac,correction_factor)
         do i=1,IL
           tx = (real(i)-txc)*ds
           rr = max(1.0,sqrt(ty*ty+tx*tx))
-          !Compute winds 
+          !Compute winds
           if(land(i,j).eq.1) then
             fac = reduction_factor*reduction_land
           else
@@ -2141,7 +2141,7 @@ c JAMES v2
 c JAMES v2
 c Decided to add the asymmetry in the post-processing
           correction_factor = 0.0
-c          correction_factor = 2.0*(rm*rr)/(rm**2 + rr**2) 
+c          correction_factor = 2.0*(rm*rr)/(rm**2 + rr**2)
 c     +                       *1.173*spd_tc**0.63/spd_tc
 c JAMES v2
           prx(i,j)=(f_2d(i,j)+vt/rr)*vt*tx/rr
@@ -2153,7 +2153,7 @@ c JAMES v2
       end do
 c$omp end parallel do
       return
-      end subroutine prxy_willouby   
+      end subroutine prxy_willouby
 
 c --------------------------------------------
 c Sectionally continuous wind-profile function with a
@@ -2196,10 +2196,10 @@ c Returns: Swirling wind as a function or radius
       real RR,Vmax,Rmax,R1,R2,WID,ENI,XL1,AA,w, Vin, VH, wgt
 
       if(RR.le.R1) then
-        ! Inside the eye, use power law 
+        ! Inside the eye, use power law
         VofRH = Vin(RR,Vmax,Rmax,ENI)
       else if(RR.le.R2) then
-        !In transition area, 
+        !In transition area,
         w = wgt((RR-R1)/WID)
 
         !Compute weighted combination of inside and outside profiles
