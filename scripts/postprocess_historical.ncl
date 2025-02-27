@@ -1,11 +1,11 @@
-; plot and writen out wind swath from PBL model 
-; 10-min input PBL model output data is interpolated 
-; UPDATE: is_vt  = True         ; read vt data from bdy_10min.txt file 
+; plot and writen out wind swath from PBL model
+; 10-min input PBL model output data is interpolated
+; UPDATE: is_vt  = True         ; read vt data from bdy_10min.txt file
 ; Ming Ge Feb 2020 and modified by James Done Apr 2020
 
 ; these paths are relative to the directory where this program was called from
 load "scripts/substring.ncl"
-load "scripts/rd_IBTrACS.ncl" 
+load "scripts/rd_IBTrACS.ncl"
 load "scripts/vt_latlon_min.ncl"
 
 ; JAMES. The fix for the too-high (gradient-like) winds at time zero is to write over the first time:
@@ -27,7 +27,7 @@ begin
   dir_in = "./"
 
 ; read vt from bdy_10min.txt file if it is available
-  is_vt = True          
+  is_vt = True
 
   bdy_file = "bdy_10min.txt"
 
@@ -50,7 +50,7 @@ begin
   ds     = ff@DX
 
   dims   = dimsizes(lat_2d)
-  
+
   topo@description = ""
   topo@units       = ""
 
@@ -58,7 +58,7 @@ begin
   nx = dims(1)      ; lq
 
   print("nx=" + nx + " ny=" + ny)
-  
+
 ;  nk = 18
 ; changed this because the fortran code is no longer outputting every vertical level of pbl model
   nk = 1
@@ -69,7 +69,7 @@ begin
   swath_slp@units = "hPa"
 
   res                       = True
-  res@gsnDraw               = False            
+  res@gsnDraw               = False
   res@gsnFrame              = False
   res@gsnMaximize           = True
   res@gsnAddCyclic          = False       ; regional data
@@ -79,29 +79,29 @@ begin
   res@cnLevelSelectionMode  = "ExplicitLevels"
 ;  res@cnLevels              = ispan(vmin, 49, 3)
   res@cnLevels              = ispan(vmin, 67, 3)
-  res@pmTickMarkDisplayMode = "Always" 
-  res@mpFillOn              = False 
-  res@pmLabelBarDisplayMode = "Always" 
-  res@pmLabelBarHeightF     = 0.1   
+  res@pmTickMarkDisplayMode = "Always"
+  res@mpFillOn              = False
+  res@pmLabelBarDisplayMode = "Always"
+  res@pmLabelBarHeightF     = 0.1
   res@mpProjection          = "LambertConformal"
   res@mpOutlineBoundarySets = "GeophysicalAndUSStates"
   res@mpLambertMeridianF    = ff@CEN_LON
   res@mpLambertParallel1F   = ff@TRUELAT1
   res@mpLambertParallel2F   = ff@TRUELAT2
   res@lbAutoManage          = False             ; we control label bar
-  res@mpLimitMode           = "Corners" 
-  res@mpLeftCornerLatF      = lat_2d(0,0) 
+  res@mpLimitMode           = "Corners"
+  res@mpLeftCornerLatF      = lat_2d(0,0)
   res@mpLeftCornerLonF      = lon_2d(0,0)
   res@mpRightCornerLatF     = lat_2d(dims(0)-1, dims(1)-1)
-  res@mpRightCornerLonF     = lon_2d(dims(0)-1, dims(1)-1)  
- 
+  res@mpRightCornerLonF     = lon_2d(dims(0)-1, dims(1)-1)
+
   sres                      = True
   sres@gsnDraw              = False             ; do not draw the plot
   sres@gsnFrame             = False
-  sres@gsnAddCyclic         = False 
-  sres@tfDoNDCOverlay       = True 
+  sres@gsnAddCyclic         = False
+  sres@tfDoNDCOverlay       = True
   sres@cnLinesOn            = True
-  sres@cnLevelSelectionMode = "ExplicitLevels"  
+  sres@cnLevelSelectionMode = "ExplicitLevels"
   sres@cnLineLabelsOn       = False
   sres@cnLineColor          = "white"
   sres@cnLineThicknessF     = 1.0
@@ -114,7 +114,7 @@ begin
 
   cmap = read_colormap_file("wind_17lev")
 ;  cmap = read_colormap_file("precip2_17lev")
- 
+
 
   mkres               = True
   mkres@gsMarkerIndex = 16     ; Filled circle
@@ -126,7 +126,7 @@ begin
   all_dir(0) = dir_in + sens_case
   print(all_dir)
 ;  n_dir = dimsizes(all_dir) - 1
-  n_dir = dimsizes(all_dir) 
+  n_dir = dimsizes(all_dir)
   print( "Number of dir is " + n_dir)
   delim  = " "	; for bdy_10min.txt
   do nd = 0, n_dir - 1
@@ -160,16 +160,16 @@ begin
     lat_trk = stringtofloat(str_get_field(data_s, 8, delim))
     lon_trk = stringtofloat(str_get_field(data_s, 9, delim))
     rmax    = stringtofloat(str_get_field(data_s, 5, delim))
-    vmax    = stringtofloat(str_get_field(data_s, 3, delim)) 
+    vmax    = stringtofloat(str_get_field(data_s, 3, delim))
 
     if(n_field.eq.13)
       vt_spd  = stringtofloat(str_get_field(data_s, 10, delim)) ; ie reading the reduced Vt from bdy_10min.txt
       vt_dir  = stringtofloat(str_get_field(data_s, 11, delim))
       ; u      = -wspd*sin(wdir*rad)  ; u component (zonal)
       ; v      = -wspd*cos(wdir*rad)  ; v component (meridional)
-      u_vt = vt_spd*sin(vt_dir*rad)  
-      v_vt = vt_spd*cos(vt_dir*rad) 
- 
+      u_vt = vt_spd*sin(vt_dir*rad)
+      v_vt = vt_spd*cos(vt_dir*rad)
+
       yyyymmddhhmm_s = str_get_field(data_s, 12, delim)
       yyyy_s = str_get_cols(str_get_field(data_s, 12, delim), 0, 3)
       mm_s   = str_get_cols(str_get_field(data_s, 12, delim), 4, 5)
@@ -197,10 +197,10 @@ begin
     ;  Translation speed correction
     ;  vt_eb = 1.173*vt_eb^0.63
     ; previously Ming applied the vt reduction for both reading the reduced vt from bdy_10min file and calculating the vt from x and y locations
-    if (n_field.eq.13)   
+    if (n_field.eq.13)
     print("We read in the reduced Vt from bdy file so no need to further reduce it")
     else
-    v_vt = where(v_vt.gt.0, 1.173*v_vt^0.63, -1.173*abs(v_vt)^0.63)  
+    v_vt = where(v_vt.gt.0, 1.173*v_vt^0.63, -1.173*abs(v_vt)^0.63)
     u_vt = where(u_vt.gt.0, 1.173*u_vt^0.63, -1.173*abs(u_vt)^0.63)
     end if
 
@@ -225,15 +225,15 @@ begin
       rr_3d(:, ii, jj) = 2.0*rmax*rr/(rr*rr+rmax*rmax)
     end do
     end do
-  
+
     allfile_d = systemfunc("ls " + dir_out + "/*_" + pro_wind + "_???.d")
     print(allfile_d)
 ;    n_time = dimsizes(allfile_d) - 1
-   n_time = dimsizes(allfile_d) 
+   n_time = dimsizes(allfile_d)
 
     print(n_time)
 ; for code testing
-;    n_time = 10  
+;    n_time = 10
 
     uu   = new((/n_time, ny, nx/), float)
     uu!0 = "time"
@@ -265,12 +265,12 @@ begin
       ct = 0
       flnm = allfile_d(nh)
       print("process: " + flnm + nx + " " + ny)
-  
+
       uu(nh, :,:) = fbinrecread(flnm, ct, (/ny, nx/), "float") + u_vt(nh)*rr_3d(nh,:,:)
       ct = ct + nk
       vv(nh, :,:) = fbinrecread(flnm, ct, (/ny, nx/), "float") + v_vt(nh)*rr_3d(nh,:,:)
       ct = ct + 3
-      slp(nh, :,:) = fbinrecread(flnm, ct, (/ny, nx/), "float") 
+      slp(nh, :,:) = fbinrecread(flnm, ct, (/ny, nx/), "float")
 ;      ct = ct + 1
 ;      prx(nh, :,:) = fbinrecread(flnm, ct, (/ny, nx/), "float")
 ;      ct = ct + 1
@@ -314,10 +314,10 @@ begin
 
     res@tiMainString = name_s
 
-    flnm_plot = dir_out + str_lower(name_s) + "_" + pro_wind 
+    flnm_plot = dir_out + str_lower(name_s) + "_" + pro_wind
     wks = gsn_open_wks("pdf", flnm_plot)
     gsn_define_colormap(wks, "wind_17lev")
-   
+
     plot    = gsn_csm_contour_map(wks, swath_wind, res)
     plot_ov = gsn_csm_contour    (wks,  topo, sres)
     overlay(plot, plot_ov)
@@ -327,10 +327,10 @@ begin
     ;lat_t = track[0]
     ;lon_t = track[1]
     ;wind_t = track[2]
- 
+
     lat_t = lat_trk(::12)
     lon_t = lon_trk(::12)
-    wind_t = vmax(::12) 
+    wind_t = vmax(::12)
 
     ; plot trajectory and wind as marker
     trajectory = gsn_add_polyline(wks, plot, lon_t, lat_t, rest)
@@ -346,18 +346,18 @@ begin
 
     draw(plot)
     frame(wks)
- 
+
     ; write out
-    line_s = new((/nx*ny + 1/), string) 
+    line_s = new((/nx*ny + 1/), string)
     line_s(0) = "wind(m/s),    lat,     lon"
     ct = 0
-    
+
     do nyy = 0, ny-1
     do nxx = 0, nx-1
       if(.not.ismissing(swath_wind(nyy, nxx))) then
         ct =  ct + 1
         line_s(ct) = sprintf("%8.2f", swath_wind(nyy, nxx)) + "," + sprintf("%8.2f", lat_2d(nyy, nxx)) + "," +	\
-	     	   sprintf("%8.2f", lon_2d(nyy, nxx)) 
+	     	   sprintf("%8.2f", lon_2d(nyy, nxx))
       end if
     end do
     end do
@@ -386,7 +386,7 @@ begin
 
     fptime@long_name = "model time" ;
     fptime@standard_name = "time" ;
-    fptime@base_date = "1900-01-01 00:00:00 UTC" 
+    fptime@base_date = "1900-01-01 00:00:00 UTC"
     fptime@_FillValue = -9999
     fptime!0 = "time"
 
@@ -414,8 +414,8 @@ begin
     ncdf->swath_wind = swath_wind
 ;    ncdf->swath_slp  = swath_slp
     ncdf->lat_2d     = lat_2d
-    ncdf->lon_2d     = lon_2d  
-;    ncdf->U          = uu(:,:,:)    
+    ncdf->lon_2d     = lon_2d
+;    ncdf->U          = uu(:,:,:)
 ;    ncdf->V          = vv(:,:,:)
 ;    ncdf->SLP        = slp(:,:,:)
 ;    ncdf->time       = fptime

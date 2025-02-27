@@ -1,8 +1,8 @@
 ;==================================================
-; select, process, and plot all TC tracks within 200km of land  
+; select, process, and plot all TC tracks within 200km of land
 ; input files:  rmax_ib.nc, vmax_ib.nc, IBTrACS.ALL.v04r00.nc
 ;	        geo.nc
-; output files: bdy_10min.txt, lat_2d.dat, topo.dat, landuse.dat  
+; output files: bdy_10min.txt, lat_2d.dat, topo.dat, landuse.dat
 ; Ming Ge, March 2020 and James Done March 2021
 ;==================================================
 
@@ -14,7 +14,7 @@ begin
   is_write = True
   ; do we want to write out the domain data files just once for only the first storm encountered and then stop the script?
   is_dat   = False
- 
+
   ; set working directories
   dir_in = "/glade/work/done/footprints/raincoat/input_data/"
   dir_code = "/glade/work/done/footprints/raincoat/code/"
@@ -39,9 +39,9 @@ begin
   ff = addfile(flnm, "r")
   lat_2d = ff->XLAT_M(0,:,:)
   lon_2d = ff->XLONG_M(0,:,:)
-  topo   = ff->HGT_M(0,:,:)       
-  landuse = toint(ff->LU_INDEX(0,:,:))    
-  
+  topo   = ff->HGT_M(0,:,:)
+  landuse = toint(ff->LU_INDEX(0,:,:))
+
   print("Setting TOPO to zero for ocean points")
   topo = where(landuse.eq.17,0.,topo)
 
@@ -54,9 +54,9 @@ begin
   ; used to cut TC tracks close to domain boundaries
   dis_bdy_s = 0.3         ; deg
   dis_bdy_n = 0.3
-  dis_bdy_e = 0.3 
+  dis_bdy_e = 0.3
   dis_bdy_w = 0.3
-  
+
   lat_s = min(lat_2d)
   lat_n = max(lat_2d)
   lon_w = min(lon_2d)
@@ -82,7 +82,7 @@ begin
 
   flnm_ib = dir_in + "vmax_ib.nc"
   f_ib    = addfile(flnm_ib,   "r")
-  spd_ib = f_ib->vmax_ib	;(storm, date_time) 
+  spd_ib = f_ib->vmax_ib	;(storm, date_time)
   print("---- read in: " + flnm_ib )
   print(dimsizes(spd_ib))
 
@@ -94,7 +94,7 @@ begin
   time     = f_ib->time	 ;v4  double time(storm, date_time) days since 1858-11-17 00:00:00
   print(dimsizes(time))
 
-  name_ib  = tostring(f_ib->name) 
+  name_ib  = tostring(f_ib->name)
   dist2land = toint(f_ib->landfall)
   lat_ib   = f_ib->lat   ; (storm, date_time)
   lon_ib   = f_ib->lon
@@ -113,7 +113,7 @@ begin
   n_date_time = dims(1)
   delete(dims)
 
-  utc_date  = ut_calendar(time, 0)      
+  utc_date  = ut_calendar(time, 0)
   year_ib   = toint(utc_date(:, :, 0))
   mm_ib     = toint(utc_date(:, :, 1))
   dd_ib     = toint(utc_date(:, :, 2))
@@ -131,17 +131,17 @@ begin
   ; Start to look for all histroical TC tracks the cross the geographic domain
 
   ; note: variables without missing value: time, vt_ib, dir_ib
-  ;       last one is missing: dist2land 
+  ;       last one is missing: dist2land
   ; there are missing lat_ib/lon_ib in the middle of obs.
   ; cut data to model domain
   lat_ib = where(lat_ib.lt.lat_s+dis_bdy_s.or.lat_ib.gt.lat_n-dis_bdy_n.or.	\
  		 lon_ib.lt.lon_w+dis_bdy_w.or.lon_ib.gt.lon_e-dis_bdy_e,	\
                  lat_ib@_FillValue, lat_ib)
-  lon_ib = where(.not.ismissing(lat_ib), lon_ib, lon_ib@_FillValue) 
+  lon_ib = where(.not.ismissing(lat_ib), lon_ib, lon_ib@_FillValue)
 
   ; ##########################
-  ; for checking data change False to True here. 
-  if(False) then 
+  ; for checking data change False to True here.
+  if(False) then
   ct = 0
   do nt = 0, n_tc_ib - 1
     if(.not.all(ismissing(lat_ib(nt,:)))) then
@@ -154,7 +154,7 @@ begin
           print(year_ib(nt,ni)+""+mmddhh_ib(nt,ni)+" "+ dir_ib(nt,ni)+" "+ vt_ib(nt,ni) + " " + name_ib(nt)+" "+ni+"-"+ind_e )
 
           ;print(year_ib(nt,ind_s:ind_e) + "" + mmddhh_ib(nt,ind_s:ind_e) + " " + dist2land(nt,ind_s:ind_e) + " " + name_ib(nt))
-          ct = ct + 1   
+          ct = ct + 1
         end if
       end do
       delete([/ind_all/])
@@ -176,7 +176,7 @@ begin
   vt_ib     = where(.not.ismissing(year_ib), vt_ib,     vt_ib@_FillValue)
   dir_ib    = where(.not.ismissing(year_ib), dir_ib,    dir_ib@_FillValue)
   dist2land = where(.not.ismissing(year_ib), dist2land, dist2land@_FillValue)
- 
+
   print("----IB data info ----")
   print("lat_track : "   + min(lat_ib) + "/" + max(lat_ib)  + "   lon: " + min(lon_ib)  + "/" + max(lon_ib))
   print("lat_domain: "   + min(lat_s) + "/" + max(lat_n)  + "   lon: " + min(lon_w)  + "/" + max(lon_e))
@@ -188,9 +188,9 @@ begin
   delete([/time, utc_date, mm_ib, dd_ib, hh_ib/])
 
   ; plot a map of all the identified TC tracks
-  flnm = dir_out + "tracks_landfall_50" 
+  flnm = dir_out + "tracks_landfall_50"
   wks  = gsn_open_wks("png", flnm )
-  gsn_define_colormap(wks, "MPL_Greys")  
+  gsn_define_colormap(wks, "MPL_Greys")
 
   res                        = True
   res@gsnDraw                = False
@@ -201,17 +201,17 @@ begin
   rest                       = True
   rest@gsLineThicknessF      = 1.5
   rest@gsLineColor           = "Black"
-  
+
   first                      = True
   first@gsMarkerIndex        = 1
   first@gsMarkerColor        = "black"
   first@gsMarkerThicknessF   = 6.0
-  first@gsMarkerSizeF	     = 0.015	
- 
-  res@mpMinLatF = lat_s 
-  res@mpMaxLatF = lat_n 
-  res@mpMinLonF = lon_w 
-  res@mpMaxLonF = lon_e 
+  first@gsMarkerSizeF	     = 0.015
+
+  res@mpMinLatF = lat_s
+  res@mpMaxLatF = lat_n
+  res@mpMinLonF = lon_w
+  res@mpMaxLonF = lon_e
   res@mpCenterLonF = 0.5*(lon_w + lon_e)
 
   txres = True
@@ -249,16 +249,16 @@ begin
       ; get track starting point ind_0
       ind_0 = 999
       do nd = ind_s, ind_e
-        ; NOTE: by doing following, it will miss the landing after the first 
+        ; NOTE: by doing following, it will miss the landing after the first
         ;       that is one TC one count
         ;if(.not.ismissing(rmax_ib(ns,nd)).and.dist2land(ns,nd).le.200 \
 	;   .and.all(dist2land(ns,nd:ind_e).le.200)) then
-        if(.not.ismissing(rmax_ib(ns,nd)).and.dist2land(ns,nd).le.1000) then 
+        if(.not.ismissing(rmax_ib(ns,nd)).and.dist2land(ns,nd).le.1000) then
           ind_0 = nd
           break
         end if
       end do
-       
+
       if((ind_0.eq.999).or.(region_s.eq."EP".and.lat_ib(ns,ind_0).ge.18.and.lon_ib(ns,ind_0).ge.-98) \
          .or.(region_s.eq."EP_E".and.lat_ib(ns,ind_0).ge.16)) then
         continue
@@ -266,10 +266,10 @@ begin
 
       ; get track ending point ind_1
       ind_1 = 999
-      do nd = ind_0 + 2, ind_e 
+      do nd = ind_0 + 2, ind_e
        ind_c = ind_e+ind_0 - nd + 2
        dist2land_tmp = where(dist2land(ns,:).gt.1000, dist2land@_FillValue, dist2land(ns,:))
-       if(.not.ismissing(dist2land_tmp(ind_c-1))) then  
+       if(.not.ismissing(dist2land_tmp(ind_c-1))) then
           ind_1 = ind_c - 1
           break
         end if
@@ -281,14 +281,14 @@ begin
 
       print("JAMES ind_1 is " + ind_1)
 
-     
+
       n_time = ind_1 - ind_0 + 1
       print("JAMES lat_ib " + lat_ib(ns,ind_0::))
 
       lat_ib_1d  = lat_ib (ns,ind_0:ind_1)
       lon_ib_1d  = lon_ib (ns,ind_0:ind_1)
       juli_ib_1d = juli_ib(ns,ind_0:ind_1)
-     
+
       ; monotonically increasing or decreasing
       do nn = 1, n_time - 1
         if(abs(juli_ib_1d(nn)-juli_ib_1d(nn-1)).le.0.01) then
@@ -298,7 +298,7 @@ begin
 
       vt_ib_1d   = 1.173*(vt_ib(ns, ind_0:ind_1)*kt2mps)^0.63
       dir_ib_1d  = dir_ib (ns, ind_0:ind_1)
-      vmax_ib_1d = spd_ib (ns, ind_0:ind_1) 
+      vmax_ib_1d = spd_ib (ns, ind_0:ind_1)
       rmax_ib_1d = rmax_ib(ns, ind_0:ind_1)
       r34_ib_1d  = r34_ib (ns, ind_0:ind_1)
       pmin_ib_1d = pmin_ib(ns, ind_0:ind_1)
@@ -374,7 +374,7 @@ begin
         mkdir_cmd = "csh -c 'if (! -d " + dir_pbl + ") then ;  mkdir " + dir_pbl + "; endif'"
         system(mkdir_cmd)
         asciiwrite(flnm, line_s)
-             
+
         if(is_dat) then
           filo = dir_out + "landuse.dat"       ; output file
           print("output file: "+ filo)

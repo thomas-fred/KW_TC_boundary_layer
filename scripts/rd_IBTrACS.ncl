@@ -1,4 +1,4 @@
-; get IBTrACS track info. lat, lon, wind 
+; get IBTrACS track info. lat, lon, wind
 ; given storm name and year, and lat-lon range
 ; Ming Ge Dec. 2019
 
@@ -8,7 +8,7 @@ function rd_IBTrACS(name_s:string, year_i:numeric, lat_1:numeric, lat_2:numeric,
 
 local flnm_ib, f_ib, time, lat_ib, lon_ib, name_ib, wind_ib, dims, n_storm, utc_date, year_ib,	\
       lat, lon, wind_trk, ind_t, lat_t, lon_t, wind_t, lat_1, lat_2, lon_1, lon_2
-   
+
 begin
   flnm_ib = "/glade/work/mingge/TC_DBS/IBTrACS.ALL.v04r00.nc"
   print("function rd_IBTrACS read: "  + flnm_ib)

@@ -29,13 +29,13 @@ local instr, first, last, main, p2
 
 begin
    main = stringtochar (instr)		; convert input string to char array
-					; terminal null character is included   
-   
+					; terminal null character is included
+
    if (last .ge. first) then		; check requested end position
       p2 = last				; go to last position specified
    else					; but if less than first:
       p2 = dimsizes (main) - 2		; go to last avail char in main string
    end if
-   
+
    return (chartostring (main(first:p2)))	; extract substring
 end
