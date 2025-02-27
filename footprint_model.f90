@@ -1132,8 +1132,8 @@ subroutine scinex(gm, gn, scala, scinto, il, jl)
    jgn = int(gn)
    fm = gm - igm
    fn = gn - jgn
-   if (fm .lt. 1.e - 06) fm = 0.
-   if (fn .lt. 1.e - 06) fn = 0.
+   if (fm .lt. 1.e-06) fm = 0.
+   if (fn .lt. 1.e-06) fn = 0.
    ms = mmax - 1
    ns = nmax - 1
    mr = mmin + 1
