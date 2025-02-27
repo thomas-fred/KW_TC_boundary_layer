@@ -1,0 +1,12 @@
+&INIT
+      lp    = 250
+      lq    = 250
+      ds    = 2.0e3
+      dt    = 10.0
+      kfi   = 2
+      khr   = 1
+      indx  = 0
+      nst   = 0
+      fnm   = 'maria'
+      pro_wind = 'WILLOUBY'
+&END

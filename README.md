@@ -58,10 +58,13 @@ TODO
 
 # Testing
 
-There is an integration test in `tests/`, run from this directory as follows:
-`./tests/integration.sh`. It requires that the `namelist` has not changed
-without appropriately updating the reference (`maria_WILLOUBY.*`) output in
-`tests/`.
+There are simple integration tests in `tests/integration`, run from this directory as follows.
+
+For 2 hours of Maria 2017 over Puerto Rico, with a coarse timestep:
+`./tests/integration/test.sh maria_PRI_short`
+
+The same problem, but 24 hours and with a 4 second timestep:
+`./tests/integration/test.sh maria_PRI_long`
 
 # Plan
 
@@ -77,7 +80,12 @@ could try coarsening the grid, but that's seemingly encoded in the bdy_10.txt
 file (eye spatial indicies) and many of the input files -- may require running
 `preprocess_historical.ncl` first.
 
-Lint `footprint_model.f` with Fortitude
+Lint / format `footprint_model.f`:
+- ffixed2free -- should move us much closer to a more modern standard like f95
+- fortitude
+- fortify
+- RefactorF4Acc
+- camfort
 
 Investigate where we can tidy up
 - Tidy up all the paths and organise code and data
