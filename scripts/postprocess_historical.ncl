@@ -3,9 +3,10 @@
 ; UPDATE: is_vt  = True         ; read vt data from bdy_10min.txt file 
 ; Ming Ge Feb 2020 and modified by James Done Apr 2020
 
-load "substring.ncl"
-load "rd_IBTrACS.ncl" 
-load "vt_latlon_min.ncl"
+; these paths are relative to the directory where this program was called from
+load "scripts/substring.ncl"
+load "scripts/rd_IBTrACS.ncl" 
+load "scripts/vt_latlon_min.ncl"
 
 ; JAMES. The fix for the too-high (gradient-like) winds at time zero is to write over the first time:
 ; cp maria_WILLOUBY_001.d maria_WILLOUBY_000.d

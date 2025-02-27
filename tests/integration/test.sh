@@ -37,7 +37,7 @@ head -${N_ROWS_TRACK_FILE} bdy_10min.txt > ${STORM_YEAR}/bdy_10min.txt
 mv *_???.d ${STORM_YEAR}
 
 echo "Postprocessing outputs; creating footprint plot"
-micromamba run --name kw-pbl ncl postprocess_historical.ncl
+micromamba run --name kw-pbl ncl ./scripts/postprocess_historical.ncl
 
 echo "Checking output against reference"
 STORM_PROFILE="maria_WILLOUBY"
