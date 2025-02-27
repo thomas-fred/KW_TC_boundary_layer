@@ -17,7 +17,7 @@ Lint
 
 Format
 - ffixed2free -- should move us much closer to a more modern standard like f95
-- fortify -- apply standard indentation
+- findent -- apply standard indentation, also move to free form
 
 Refactor
 - f90split -- split program by subroutines (and other blocks?)

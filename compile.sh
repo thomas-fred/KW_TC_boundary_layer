@@ -5,4 +5,4 @@
 
 # but not on pwlldu, so use GNU fortran
 rm footprint_model
-gfortran -O3 -cpp -std='gnu' -fopenmp -o footprint_model src/main.f
+gfortran -O3 -cpp -std='gnu' -fopenmp -o footprint_model src/main.f90
