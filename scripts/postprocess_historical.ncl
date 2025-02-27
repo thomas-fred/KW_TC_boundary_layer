@@ -11,7 +11,6 @@ load "scripts/vt_latlon_min.ncl"
 ; JAMES. The fix for the too-high (gradient-like) winds at time zero is to write over the first time:
 ; cp maria_WILLOUBY_001.d maria_WILLOUBY_000.d
 
-
 begin
 
 ; select the wind profile model used
@@ -115,7 +114,6 @@ begin
   cmap = read_colormap_file("wind_17lev")
 ;  cmap = read_colormap_file("precip2_17lev")
 
-
   mkres               = True
   mkres@gsMarkerIndex = 16     ; Filled circle
   mkres@gsMarkerSizeF = 0.012
@@ -216,7 +214,6 @@ begin
       vmax = vmax + 1.173*vt_spd^0.63 ; ie adding back the reduced vt as calc by x and y locations.
     end if
 
-
 ;    print("vt(m/s)=" + sqrt(u_vt*u_vt +v_vt*v_vt) + " vmax= " + vmax +  " ddhh=" + dd_s + "" + hh_s )
 
     do ii = 0, ny - 1
@@ -296,7 +293,6 @@ begin
   fptime   = cd_inv_calendar(yyyy,mm,dd,hh,mn,sc,units, 0)
 
   print(fptime)
-
 
     spd_tmp = sqrt(uu*uu+vv*vv)
 

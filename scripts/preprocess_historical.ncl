@@ -127,7 +127,6 @@ begin
     lon_ib = where(lon_ib.gt.180, lon_ib-360, lon_ib)
   end if
 
-
   ; Start to look for all histroical TC tracks the cross the geographic domain
 
   ; note: variables without missing value: time, vt_ib, dir_ib
@@ -281,7 +280,6 @@ begin
 
       print("JAMES ind_1 is " + ind_1)
 
-
       n_time = ind_1 - ind_0 + 1
       print("JAMES lat_ib " + lat_ib(ns,ind_0::))
 
@@ -323,7 +321,6 @@ begin
 
       mmddhhmm_s = where(mmddhhmm_1.gt.10000000, tostring(mmddhhmm_1), "0"+tostring(mmddhhmm_1))
 
-
       ind_r = ind(rmax_ib_1d)
 
       lat_1 = linint1 (xi, lat_ib_1d,  False, xo, 0)
@@ -343,7 +340,6 @@ begin
 ;; set missing r34 rows to last positive value
 ;      non_missing_r34_1 = ind(.not.ismissing(r34_1))
 ;      r34_1 = where(ismissing(r34_1),r34_1(max(non_missing_r34_1)),r34_1)
-
 
       loc = wrf_ll_to_ij(lon_1, lat_1, opt)
       typ = loc(0,:)
