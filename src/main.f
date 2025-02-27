@@ -5,9 +5,9 @@ c  balance at the top of the boundary layer with a multi-level      *
 c  hydrostatic, elastic model on an f-plane or on a beta-plan       *
 c  The model was designed and coded by Yuqing Wang                  *
 c  The code was modified by James Done and Ming Ge in 2019-2021     *
-c&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+c*******************************************************************
       program PBL_MODEL
-c&&&&&&&&&&&&&&&&&&s&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+c*******************************************************************
 c Compile for Intel:  ifort -O3 -cpp -qopenmp -ftz -zero -o footprint_model.exe footprint_model.f
 c--------------------------------------------------------------------
       implicit none
