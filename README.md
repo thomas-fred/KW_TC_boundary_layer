@@ -81,11 +81,11 @@ file (eye spatial indicies) and many of the input files -- may require running
 `preprocess_historical.ncl` first.
 
 Lint / format `footprint_model.f`:
-- ffixed2free -- should move us much closer to a more modern standard like f95
-- fortitude
-- fortify
+- ffixed2free -- moved us much closer to a more modern standard like f95, but failed test
+- fortify -- indentation and other formatting applied successfully
+- camfort -- tried basic checks and dead code to no avail
+- f90split -- happily split up chunks into files, but no main to keep them together?
 - RefactorF4Acc
-- camfort
 
 Investigate where we can tidy up
 - Tidy up all the paths and organise code and data
