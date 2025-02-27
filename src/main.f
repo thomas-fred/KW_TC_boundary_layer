@@ -1803,9 +1803,6 @@ c JAMES test
        if(AA.lt.0) AA = 0.
 
 
-       Print*, "X1 = ", X1
-c       Print*, "NN = ", NN
-       Print*, "AA = ", AA
 c JAMES v2
 
        return
