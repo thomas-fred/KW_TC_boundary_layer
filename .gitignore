@@ -1,7 +1,9 @@
 archive/
 MARIA_2017/
+bdy_10min.txt
+footprint_model
 *.nc
 *.dat
 *.d
-bdy_10min.txt
-footprint_model
+*.o
+*.mod

@@ -17,7 +17,11 @@ rm -r ${STORM_YEAR}
 mkdir ${STORM_YEAR}
 
 echo "Compiling program"
-./compile.sh
+cd src
+make clean
+make
+make install
+cd ..
 
 echo "Using following problem configuration for ${STORM_YEAR}"
 TEMP_NAMELIST_FILENAME=$(mktemp)

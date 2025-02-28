@@ -7,6 +7,8 @@
 !  The code was modified by James Done and Ming Ge in 2019-2021     *
 !*******************************************************************
 program PBL_MODEL
+
+   use cal_slp_mod
 !*******************************************************************
 ! Compile for Intel:  ifort -O3 -cpp -qopenmp -ftz -zero -o footprint_model.exe footprint_model.f
 !--------------------------------------------------------------------
@@ -396,57 +398,11 @@ program PBL_MODEL
    deallocate(vm_1d,pc_1d, rm_1d, r34_1d,pe_1d,lat_1d,lon_1d)
 
    close(10)
+
+
    stop
-end
-! Ming Ge Feb. 2 2021 calculate surface pressure from prx, pry,,txp,typ,pct
-! Modified by James Done Mar 5 2021
+end program PBL_MODEL
 
-subroutine cal_slp(slp, IL, JL, ds, prx, pry, txc, tyc, pc)
-   implicit none
-   integer ii, jj, IL, JL, ic, jc
-   real txc, tyc, pc, ds
-   real slp(IL, JL), prx(IL, JL), pry(IL, JL)
-
-   ic = int(txc)
-   jc = int(tyc)
-
-   slp(ic, jc) = pc
-!      Standard Atmosphere states the density of air is 1.225kg/m3
-!      for hurrican, (P=980hPa, T= 300, R= 287) rho = 1.13
-!       rho = 1.13
-!       Print*, "ds = ", ds
-!       Print*, "ds_rho = ", ds_rho
-
-!      we divide by 100 to convert from pascals to hPa
-!      we actually divide by 113 because we divide by 100 and by rho
-
-   do ii = 1, ic - 1
-      slp(ic-ii, jc) =  slp(ic-ii+1, jc) - prx(ic-ii, jc)*ds/100.
-   enddo
-
-   do ii = ic + 1, IL
-      slp(ii, jc) =  slp(ii-1, jc) + prx(ii, jc)*ds/100.
-   enddo
-
-   do ii = 1, IL
-      do jj = 1, jc - 1
-         slp(ii, jc-jj) =  slp(ii, jc-jj+1) - pry(ii, jc-jj)*ds/100.
-      enddo
-      do jj = jc + 1, JL
-         slp(ii, jj) =  slp(ii, jj-1) + pry(ii, jj)*ds/100.
-      enddo
-   enddo
-
-   return
-end
-
-!
-
-
-
-
-
-!
 subroutine inner(u,v,w,f_2d,prx,pry,akv,IL,JL,ds,dt,top,land,&
 &cd, bw,bnd,km,zz,dzz,zu,dzu,nbn,ntt,nst)
    implicit none
@@ -2236,5 +2192,3 @@ end function VH
 !        if(rm_1d(k).ge.800.0e3.or.rm_1d(k).le.1.0e3) then
 !          rm_1d(k) = 46.4 * exp(-0.0155 * vm_1d(k) + 0.0169 * lon_1d(k))
 !        end if
-
-
