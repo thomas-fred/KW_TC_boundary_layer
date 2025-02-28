@@ -88,15 +88,15 @@ program PBL_MODEL
    close(17)
 27 format(2f10.2, 5f10.1, 2f10.2 )
 ! JAMES check read in is ok
-   Print*, txp_1d
-   Print*, typ_1d
-   Print*, vm_1d
-   Print*, pc_1d
-   Print*, rm_1d
-   Print*, r34_1d
-   Print*, pe_1d
-   Print*, lat_1d
-   Print*, lon_1d
+!  Print*, txp_1d
+!  Print*, typ_1d
+!  Print*, vm_1d
+!  Print*, pc_1d
+!  Print*, rm_1d
+!  Print*, r34_1d
+!  Print*, pe_1d
+!  Print*, lat_1d
+!  Print*, lon_1d
 ! JAMES check read in is ok
 
 
