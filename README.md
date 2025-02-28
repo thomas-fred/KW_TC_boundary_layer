@@ -41,9 +41,9 @@ This program selects, processes, and plots all TC tracks within 200km of land.
 In the bundle from James, these outputs are already given for Puerto Rico, so
 we don't _need_ to run `preprocess_historical.ncl`
 
-## footprint_model
+## boundary_layer
 
-Build `footprint_model` binary with:
+Build `boundary_layer` binary with:
 ```sh
 cd src
 make clean
@@ -54,7 +54,7 @@ make install
 Set parameters in `namelist`. Note that many parameters are still hardcoded
 inside `fooprint_model.f`, e.g. filepaths.
 
-Run with `./footprint_model`
+Run with `./boundary_layer`
 
 This will run for the timesteps requested in `namelist` and will produce lots
 of binary files like `maria_WILLOUBY_000.d`

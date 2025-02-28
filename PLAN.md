@@ -27,6 +27,8 @@
 - [] `geo_pr.nc` is on the same grid as the namelist -- how do we recreate it?
 - [] Run `preprocess_historical.ncl` as part of pipeline
 
+[] Move hardcoded parameters into namelist (e.g. reduction_factor?)
+
 [] Improving readability (naming?)
 
 [] Documentation?

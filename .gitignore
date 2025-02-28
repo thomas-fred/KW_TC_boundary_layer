@@ -1,7 +1,7 @@
 archive/
 MARIA_2017/
 bdy_10min.txt
-footprint_model
+boundary_layer
 *.nc
 *.dat
 *.d

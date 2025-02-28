@@ -10,7 +10,7 @@ program PBL_MODEL
 
    use cal_slp_mod
 !*******************************************************************
-! Compile for Intel:  ifort -O3 -cpp -qopenmp -ftz -zero -o footprint_model.exe footprint_model.f
+! Compile for Intel:  ifort -O3 -cpp -qopenmp -ftz -zero -o boundary_layer boundary_layer.f
 !--------------------------------------------------------------------
    implicit none
    integer lq, lp, km, nbd, nx, ny, nx_c, ny_c, n_bdy, n_lu

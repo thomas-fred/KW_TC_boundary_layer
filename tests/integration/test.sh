@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test footprint_model and postprocess_historical.ncl against reference output
+# Test boundary_layer and postprocess_historical.ncl against reference output
 # To be run from directory containing `tests/`, e.g.
 # ./tests/integration/test.sh maria_PRI_short
 
@@ -31,7 +31,7 @@ cp "${TEST_DIR}/namelist" "./namelist"
 cat ./namelist
 
 echo "Running boundary layer simulation"
-./footprint_model
+./boundary_layer
 
 # the postprocessing script will try and work on all the rows in the bdy_10min.txt file
 # our namelist is specifying a shorter simulation, so truncate the bdy_10min.txt first

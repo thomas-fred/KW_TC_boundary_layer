@@ -1,7 +1,7 @@
 FC:=gfortran
 GFLAGS:=-O3 -cpp -std='gnu' -fopenmp
 LDFLAGS:=-fopenmp
-OUTPUT:=footprint_model
+OUTPUT:=boundary_layer
 SOURCES:=cal_slp_mod.f90 main.f90
 OBJS:=$(patsubst %.f90, %.o, $(SOURCES))
 
