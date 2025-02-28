@@ -9,8 +9,8 @@ The code was modified by James Done and Ming Ge in 2019-2021.
 
 # Aims
 
-Improve the usability of this model
-Run this model for intense synthetic tropical cyclones for Jamaica or Mauritius
+- Improve the usability of this model
+- Run this model for intense synthetic tropical cyclones for Jamaica or Mauritius
 
 # Usage
 
@@ -33,16 +33,23 @@ You will also need a fortran compiler, e.g. gfortran or ifort.
 
 ## preprocess_historical.ncl
 
-This program selects, processes, and plots all TC tracks within 200km of land
-Input files:  rmax_ib.nc, vmax_ib.nc, IBTrACS.ALL.v04r00.nc, geo_pr.nc
-Output files: bdy_10min.txt, lat_2d.dat, topo.dat, landuse.dat
+This program selects, processes, and plots all TC tracks within 200km of land.
+
+- Input:  rmax_ib.nc, vmax_ib.nc, IBTrACS.ALL.v04r00.nc, geo_pr.nc
+- Output: bdy_10min.txt, lat_2d.dat, topo.dat, landuse.dat
 
 In the bundle from James, these outputs are already given for Puerto Rico, so
-we don't need to run preprocess_historical.ncl
+we don't _need_ to run `preprocess_historical.ncl`
 
 ## footprint_model
 
-I'm using gfortran, James uses ifort. Compile with `./compile.sh`
+Build `footprint_model` binary with:
+```sh
+cd src
+make clean
+make
+make install
+```
 
 Set parameters in `namelist`. Note that many parameters are still hardcoded
 inside `fooprint_model.f`, e.g. filepaths.
@@ -60,8 +67,10 @@ TODO
 
 There are simple integration tests in `tests/integration`, run from this directory as follows.
 
-For 2 hours of Maria 2017 over Puerto Rico, with a coarse timestep:
+For 2 hours of Maria 2017 over Puerto Rico, with a coarse timestep. The test
+takes about 70 seconds to run with 64 cores.
 `./tests/integration/test.sh maria_PRI_short`
 
-The same problem, but 24 hours and with a 4 second timestep:
+The same problem, but 24 hours duration and with a 4 second timestep, takes
+about 35 minutes with 64 cores.
 `./tests/integration/test.sh maria_PRI_long`
